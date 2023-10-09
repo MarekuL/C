@@ -1,1 +1,124 @@
 
+#include <iostream>
+#include<iomanip>
+using namespace std;
+
+int MatOrd;
+
+double d, s;
+
+int main()
+
+{
+
+    cout << "Matrix Order: " << endl;
+
+    cin >> MatOrd;
+
+    double** Matrix = new double* [MatOrd];
+
+    for (int i = 0; i <= MatOrd; i++)
+
+        Matrix[i] = new double[MatOrd];
+
+    double* Free_Member = new double[MatOrd];
+
+    double* answer = new double[MatOrd];
+
+    cout << "Enter matrix and free members " << endl;
+
+    for (int i = 1; i <= MatOrd; i++)
+
+    {
+        for (int j = 1; j <= MatOrd; j++)
+
+        {
+
+            cout << "MatrixMembers[" << i << "," << j << "] = ";
+
+            cin >> Matrix[i][j];
+
+
+
+        }
+    }
+
+    for (int i = 1; i <= MatOrd; i++)
+
+    {
+        cout << "FreeMembers,[" << i << "] = ";
+        cin >> Free_Member[i];
+    }
+
+
+    for (int k = 1; k <= MatOrd; k++) // прямой ход
+
+    {
+
+        for (int j = k + 1; j <= MatOrd; j++)
+
+        {
+
+            d = Matrix[j][k] / Matrix[k][k];
+
+            for (int i = k; i <= MatOrd; i++)
+
+            {
+
+                Matrix[j][i] = Matrix[j][i] - d * Matrix[k][i];
+
+            }
+
+            Free_Member[j] = Free_Member[j] - d * Free_Member[k];
+
+        }
+
+    }
+    cout << "Matrix after straight stroke" << endl;
+    for (int k = 1; k <= MatOrd; k++)
+    {
+        for (int j = 1; j <= MatOrd; j++)
+        {
+            cout << setw(10) << Matrix[k][j];
+        }
+        cout << endl;
+    }
+        for (int k = MatOrd; k >= 1; k--) // обратный ход
+
+        {
+
+            d = 0;
+
+            for (int j = k + 1; j <= MatOrd; j++)
+
+            {
+
+                s = Matrix[k][j] * answer[j];
+
+                d = d + s;
+
+            }
+
+            answer[k] = (Free_Member[k] - d) / Matrix[k][k];
+
+        }
+        cout << "Matrix after reverse stroke" << endl;
+        for (int k = 1; k <= MatOrd; k++)
+        {
+            for (int j = 1; j <= MatOrd; j++)
+            {
+                cout << setw(10) << Matrix[k][j];
+            }
+            cout << endl;
+        }
+
+        cout << "Answers: " << endl;
+
+        for (int i = 1; i <= MatOrd; i++)
+
+            cout << "Answers[" << i << "] = " << answer[i] << " " << endl;
+
+        return 0;
+
+    
+}
