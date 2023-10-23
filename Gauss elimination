@@ -1,5 +1,5 @@
 #include <iostream>
-#include <iomanip>
+#include <math.h>
 using namespace std;
 const int MatOrd = 3;
 
@@ -7,56 +7,71 @@ const int MatOrd = 3;
 int main()
 
 {
-    double d, s, MaxElem;
+    int StrNumOfMaxElem, ColNumOfMaxElem;
+    double d, s, max, norm;
     double Matrix1[MatOrd][MatOrd] = { 0 };
     double Matrix[MatOrd][MatOrd] = { 0 };
-    double FreeMem[MatOrd] = { 0 };
-    double FreeMem1[MatOrd] = { 0 };
+    double Free_Members[MatOrd] = { 0 };
+    double Free_Members1[MatOrd] = { 0 };
+    double _x_[MatOrd] = { 0 };
+    double Free_Members2[MatOrd] = { 0 };
     double x[MatOrd] = { 0 };
     double F[MatOrd] = { 0 };
-    cout << "Enter Matrix" << endl;
+    double F2[MatOrd] = { 0 };
+    cout << "Enter a Matrix" << endl;
     for (int i = 0; i < MatOrd; i++)
     {
 
         for (int j = 0; j < MatOrd; j++)
         {
             cin >> Matrix[i][j];
+
         }
     }
+
     for (int i = 0; i < MatOrd; i++)
     {
-
         for (int j = 0; j < MatOrd; j++)
         {
             Matrix1[i][j] = Matrix[i][j];
         }
     }
-    cout << "Enter free members" << endl;
+
+    cout << "Enter free members " << endl;
     for (int i = 0; i < MatOrd; i++)
     {
-        cin >> FreeMem[i];
+        cin >> Free_Members[i];
+        Free_Members2[i] = Free_Members[i];
     }
+
     for (int i = 0; i < MatOrd; i++)
     {
-        FreeMem1[i] = FreeMem[i];
-    }
-    for (int i = 1; i < MatOrd; i++)
-    {
-        MaxElem = Matrix[0][0];
-        if (Matrix[i][0] > MaxElem)
+        max = Matrix[0][0];
+        for (int j = 0; j < MatOrd; j++)
         {
-            for (int j = 0; j < MatOrd; j++)
+            if (Matrix[i][j] > max)
             {
-                swap(Matrix[0][j], Matrix[i][j]);
-                swap(FreeMem[0], FreeMem[i]);
+                max = Matrix[i][j];
+                StrNumOfMaxElem = i;
+                ColNumOfMaxElem = j;
             }
-
         }
+    }
+    for (int i = 0; i < MatOrd; i++)
+    {
+        swap(Matrix[0][i], Matrix[StrNumOfMaxElem][i]);
+    }
+    for (int i = 0; i < MatOrd; i++)
+    {
+        swap(Matrix[i][0], Matrix[i][ColNumOfMaxElem]);
+    }
+    swap(Free_Members[StrNumOfMaxElem], Free_Members[0]);
+    for (int i = 0; i < MatOrd; i++)
+    {
+        if (Matrix[i][i] == 0)
+            throw exception("delenie na nul");
 
     }
-    Matrix1[0][0] = Matrix[0][0] / Matrix[0][0];
-    Matrix1[1][1] = Matrix[1][1] / Matrix[1][1];
-    Matrix1[2][2] = Matrix[2][2] / Matrix[2][2];
     for (int k = 0; k < MatOrd; k++)
 
     {
@@ -75,22 +90,12 @@ int main()
 
             }
 
-            FreeMem[j] = FreeMem[j] - d * FreeMem[k];
+            Free_Members[j] = Free_Members[j] - d * Free_Members[k];
 
         }
 
     }
-    cout << "Our Matrix: " << endl;
-    for (int k = 0; k < MatOrd; k++)
 
-    {
-        for (int j = 0; j < MatOrd; j++)
-
-        {
-            cout << setw(8) << Matrix1[k][j];
-        }
-        cout<<endl;
-    }
 
     for (int k = MatOrd - 1; k >= 0; k--)
 
@@ -108,8 +113,12 @@ int main()
 
         }
 
-        x[k] = (FreeMem[k] - d) / Matrix[k][k];
+        x[k] = (Free_Members[k] - d) / Matrix[k][k];
 
+    }
+    if (ColNumOfMaxElem != 0)
+    {
+        swap(x[0], x[ColNumOfMaxElem]);
     }
     cout << endl << "Answers = ";
     for (int i = 0; i < MatOrd; i++)
@@ -121,15 +130,109 @@ int main()
             F[i] += Matrix1[i][j] * x[j];
 
     for (int i = 0; i < MatOrd; i++)
-        F[i] -= FreeMem1[i];
+        F[i] -= Free_Members2[i];
 
 
 
     cout << endl;
     for (int i = 0; i < MatOrd; i++)
         cout << F[i] << "  ";
+    for (int i = 0; i < MatOrd; i++)
+    {
+        cout << endl;
+        for (int j = 0; j < MatOrd; j++)
+        {
+            cout << Matrix1[i][j] << "   ";
+        }
+    }
+    for (int i = 0; i < MatOrd; i++)
+    {
+        for (int j = 0; j < MatOrd; j++)
+        {
+            Free_Members1[i] += Matrix1[i][j] * x[j];
+        }
+    }
+
+    for (int i = 0; i < MatOrd; i++)
+    {
+        max = Matrix1[0][0];
+        for (int j = 0; j < MatOrd; j++)
+        {
+            if (Matrix1[i][j] > max)
+            {
+                max = Matrix1[i][j];
+                StrNumOfMaxElem = i;
+                ColNumOfMaxElem = j;
+            }
+        }
+    }
+    for (int i = 0; i < MatOrd; i++)
+    {
+        swap(Matrix1[0][i], Matrix1[StrNumOfMaxElem][i]);
+    }
+    for (int i = 0; i < MatOrd; i++)
+    {
+        swap(Matrix1[i][0], Matrix1[i][ColNumOfMaxElem]);
+    }
+    swap(Free_Members1[StrNumOfMaxElem], Free_Members1[0]);
+    for (int k = 0; k < MatOrd; k++)
+
+    {
+
+        for (int j = k + 1; j < MatOrd; j++)
+
+        {
+
+            d = Matrix1[j][k] / Matrix1[k][k];
+
+            for (int i = k; i < MatOrd; i++)
+
+            {
+
+                Matrix1[j][i] = Matrix1[j][i] - d * Matrix1[k][i];
+
+            }
+
+            Free_Members1[j] = Free_Members1[j] - d * Free_Members1[k];
+
+        }
+
+    }
 
 
+    for (int k = MatOrd - 1; k >= 0; k--)
+
+    {
+
+        d = 0;
+
+        for (int j = k + 1; j < MatOrd; j++)
+
+        {
+
+            s = Matrix1[k][j] * _x_[j];
+
+            d = d + s;
+
+        }
+
+        _x_[k] = (Free_Members1[k] - d) / Matrix1[k][k];
+
+    }
+    cout << endl << "Answers = ";
+    for (int i = 0; i < MatOrd; i++)
+        cout << _x_[i] << "  ";
+    double l = abs(x[0]);
+    double m = abs(_x_[0]);
+    for (int i = 1; i < MatOrd; i++)
+    {
+        if (abs(x[i]) > l)
+            l = abs(x[i]);
+        if (abs(_x_[i]) < m)
+            m = abs(_x_[i]);
+    }
+    double RelatErr = (abs(m - l) / l);
+    cout << endl << RelatErr;
     return 0;
 
 }
